@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chiearn Hub - Login</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e8f0ff, #ffffff);
+      color: black;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 40px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 600;
+    }
+    .login-section {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #ffffffcc;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .login-section h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .login-section input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .btn {
+      padding: 12px 25px;
+      background-color: skyblue;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 5px;
+      width: 48%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      background-color: #74c7f5;
+    }
+    .btn-full {
+      width: 100%;
+      margin-top: 10px;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: -8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="Chiearn Hub Logo" style="height:40px; width:40px; object-fit:contain;">
+  <div class="logo">Chiearn Hub</div>
+</header>
+
+<section class="login-section">
+  <h1>Login</h1>
+
+  <div class="error" id="loginError"></div>
+
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+
+    <div style="margin-top:20px; text-align:center;">
+      <button type="submit" class="btn">Login</button>
+      <button type="button" class="btn" onclick="window.location.href='signup.html'">Sign Up</button>
+    </div>
+
+    <button type="button" class="btn btn-full" onclick="window.location.href='introduction.html'">
+      Introduction
+    </button>
+
+  </form>
+</section>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const loginError = document.getElementById('loginError');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    loginError.textContent = "";
+
+    if(!email || !password){
+      loginError.textContent = "Please enter email and password";
+      return;
+    }
+
+    // GET USERS FROM LOCALSTORAGE
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // FIND USER
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if(!user){
+      loginError.textContent = "Invalid email or password";
+      return;
+    }
+
+    // REDIRECT BASED ON ROLE (MODEL)
+    const userModel = user.model;
+    if(userModel === "Earner"){
+      window.location.href = "earner.html";
+    } else if(userModel === "Advertiser"){
+      window.location.href = "advertiser.html";
+    } else if(userModel === "Admin"){
+      window.location.href = "adminpanel.html";
+    } else {
+      loginError.textContent = "Invalid user role";
+    }
+  });
+</script>
+
+</body>
+</html>
